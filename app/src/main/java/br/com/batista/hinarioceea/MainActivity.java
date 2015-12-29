@@ -22,6 +22,7 @@ import java.sql.SQLException;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private DatabaseOpenHelper db = new DatabaseOpenHelper(this);
+    private Music[] musicList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 //        Adiciona lista de musicas do banco de dados ao ListView
 
-        Music[] musicList = db.getMusic();
+        musicList = db.getMusic();
         String[] titles = new String[3];
         for (int j = 0; j<3; j++){
             titles[j] = musicList[j].get_name();
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent it = new Intent(MainActivity.this, MusicActivity.class);
+        musicList = db.getMusic();
+        it.putExtra("name", musicList[position].get_name());
+        it.putExtra("lyric", musicList[position].get_lyric());
         startActivity(it);
     }
 
