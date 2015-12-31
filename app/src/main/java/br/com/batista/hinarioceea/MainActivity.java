@@ -1,9 +1,12 @@
 package br.com.batista.hinarioceea;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +17,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.support.v7.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private DatabaseOpenHelper db = new DatabaseOpenHelper(this);
     private Music[] musicList;
+    private ListView listView;
+    private ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         for (int j = 0; j<3; j++){
             titles[j] = musicList[j].get_name();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
                 android.R.id.text1, titles);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
     }
@@ -63,7 +69,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setIconifiedByDefault(false);
+
+        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                adapter.getFilter().filter(text);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                adapter.getFilter().filter(text);
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(textChangeListener);
+        return super.onCreateOptionsMenu(menu);
     }
 
 
