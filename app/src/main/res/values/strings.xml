@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">HinarioCEEA</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Hinario CEEA</string>
+    <string name="action_about">Sobre</string>
 </resources>

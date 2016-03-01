@@ -1,5 +1,6 @@
 package br.com.batista.hinarioceea;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -31,12 +32,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-
         try {
             db.createDataBase();
         } catch (IOException ioe) {
@@ -51,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 e.printStackTrace();
             }
         }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
 //        Adiciona lista de musicas do banco de dados ao ListView
 
         musicList = db.getMusic();
@@ -69,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -108,8 +110,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-            if(item.getItemId() == R.id.action_settings){
+            if(item.getItemId() == R.id.action_about){
                 // User chose the "Settings" item, show the app settings UI...
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Hinário da CEEA (Comunidade Evangélica Eterna Aliança), desenvolvido por Vitor dos Santos Batista, em parceria com Luiz Otávio Ferreira e músicas selecionadas por Fancineuto Guedes de Oliveira")
+                        .setTitle("Sobre");
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
 
             }

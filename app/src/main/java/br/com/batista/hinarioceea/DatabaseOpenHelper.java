@@ -22,7 +22,7 @@ import java.util.List;
 public class DatabaseOpenHelper extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_PATH = "/data/data/br.com.batista.hinarioceea/databases/";
+    private static final String DATABASE_PATH = "/data/data/br.com.batista.hinarioceea/databases/databases";
     private static final String DATABASE_NAME = "ldc-ceea-2.db";
     private static final String TABLE_NAME = "musics";
     private SQLiteDatabase myDataBase;
